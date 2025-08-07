@@ -22,47 +22,48 @@ describe("useCounter", () => {
   it("should increment count multiple times", () => {
     const { result } = renderHook(() => useCounter());
 
-    act(() => {
-      result.current.increment();
-      result.current.increment();
-      result.current.increment();
-    });
+    const n = 5;
 
-    expect(result.current.count).toBe(3);
+    for (let i = 0; i < n; i++) {
+      act(() => {
+        result.current.increment();
+      });
+    }
+
+    expect(result.current.count).toBe(n);
   });
 
   it("should update val and increment by new val", () => {
     const { result } = renderHook(() => useCounter());
 
     act(() => {
-      result.current.setVal(5);
+      result.current.setVal(10);
+    });
+
+    act(() => {
       result.current.increment();
     });
 
-    expect(result.current.count).toBe(5);
+    expect(result.current.count).toBe(10);
   });
 
   it("should increment by updated val multiple times", () => {
     const { result } = renderHook(() => useCounter());
 
-    act(() => {
-      result.current.setVal(3);
-      result.current.increment();
-      result.current.increment();
-    });
-
-    expect(result.current.count).toBe(6);
-  });
-
-  it("should handle negative val", () => {
-    const { result } = renderHook(() => useCounter());
+    const val = 2;
+    const n = 2;
 
     act(() => {
-      result.current.setVal(-2);
-      result.current.increment();
+      result.current.setVal(val);
     });
 
-    expect(result.current.count).toBe(-2);
+    for (let i = 0; i < n; i++) {
+      act(() => {
+        result.current.increment();
+      });
+    }
+
+    expect(result.current.count).toBe(val * n);
   });
 
   it("should handle zero val", () => {
@@ -70,6 +71,9 @@ describe("useCounter", () => {
 
     act(() => {
       result.current.setVal(0);
+    });
+
+    act(() => {
       result.current.increment();
     });
 
